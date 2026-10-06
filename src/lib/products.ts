@@ -44,34 +44,29 @@ export type ProductDraft = z.infer<typeof ProductDraftSchema>;
 
 const API_BASE = "https://dummyjson.com";
 
-export const SORT_FIELDS = ["title", "price", "stock"] as const;
-
-// export type SearchQuery = {
-//   q: string;
-//   limit: number;
-//   sortBy: (typeof SORT_FIELDS)[number];
-// };
-
 export const defaultQuery: SearchQuery = {
   q: "",
   limit: 10,
-  sortBy: "title",
+  category: "",
 };
 
 export function buildProductUrl(query: SearchQuery): string {
   const params = new URLSearchParams();
-  params.set("q", query.q);
   // เติม: เมธอดที่กำหนดค่าให้พารามิเตอร์หนึ่งตัว
   params.set("limit", String(query.limit));
-  params.set("sortBy", query.sortBy);
-  params.set("order", "asc");
   params.set("select", "title,price,stock,category,thumbnail");
 
-  const url = `${API_BASE}/products/search?${params.toString()}`;
+  const path = query.category
+    ? `/products/category/${encodeURIComponent(query.category)}`
+    : "/products/search";
+
+  if (!query.category) {
+    params.set("q", query.q);
+  }
+
+  const url = `${API_BASE}${path}?${params.toString()}`;
   console.log("เรียก URL:", url);
   return url;
-
-  return `${API_BASE}/products/search?${params.toString()}`;
 }
 
 export async function fetchProducts(
@@ -107,7 +102,7 @@ export const SearchQuerySchema = z.object({
     .int("จำนวนรายการต้องเป็นจำนวนเต็ม")
     .min(1, "อย่างน้อย 1 รายการ")
     .max(30, "ไม่เกิน 30 รายการ"),
-  sortBy: z.enum(SORT_FIELDS),
+  category: z.union([z.enum(CATEGORIES), z.literal("")]),
 });
 
 export type SearchQuery = z.infer<typeof SearchQuerySchema>;

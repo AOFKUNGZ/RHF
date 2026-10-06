@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { SORT_FIELDS, defaultQuery, SearchQuerySchema } from "@/lib/products";
+import { CATEGORIES, defaultQuery, SearchQuerySchema } from "@/lib/products";
 import type { SearchQuery } from "@/lib/products";
 
 type ProductSearchFormProps = {
@@ -28,7 +28,7 @@ export default function ProductSearchForm({
         <input
           id="q"
           type="search"
-          placeholder="เช่น โทรศัพท์, โต๊ะ, เครื่องสำอาง"
+          placeholder="กรุณากรอกชื่อสินค้า"
           {...register("q")}
         />
       </div>
@@ -48,11 +48,12 @@ export default function ProductSearchForm({
         </span>
       </div>
       <div className="field">
-        <label htmlFor="sortBy">เรียงตาม</label>
-        <select id="sortBy" {...register("sortBy")}>
-          {SORT_FIELDS.map((field) => (
-            <option key={field} value={field}>
-              {field}
+        <label htmlFor="category">หมวดหมู่</label>
+        <select id="category" {...register("category")}>
+          <option value=""></option>
+          {CATEGORIES.map((category) => (
+            <option key={category} value={category}>
+              {category}
             </option>
           ))}
         </select>

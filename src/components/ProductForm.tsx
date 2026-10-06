@@ -75,7 +75,7 @@ export default function ProductForm({
         <label htmlFor="title">ชื่อสินค้า</label>
         <input
           id="title"
-          placeholder="เช่น หูฟังไร้สาย"
+          placeholder="กรุณากรอกชื่อสินค้า"
           {...register("title")}
           aria-invalid={!!errors.title}
         />
